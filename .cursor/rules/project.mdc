@@ -1,0 +1,58 @@
+---
+description: Konteks project AI-NETWORK-ASSISTANT
+alwaysApply: true
+---
+
+# AI-NETWORK-ASSISTANT
+
+## Struktur
+- Backend: FastAPI + Pydantic, satu file: backend/main.py
+- Data: data/incident_result.json (dibaca langsung, tanpa database)
+- Frontend: React + Vite + TypeScript + Tailwind (folder /frontend, baru dibuat)
+
+## Cara run backend
+- Dari root, venv aktif: uvicorn backend.main:app --reload
+- Docs: http://localhost:8000/docs
+
+## Endpoint (semua GET)
+- / -> {"message": "..."}
+- /incidents -> list[Incident]
+- /incidents/{incident_id} -> Incident, 404 {"detail": "Incident not found"} kalau tidak ada
+
+## Schema Incident (semua field string)
+incident_id, device_id, severity, anomaly_type, start_time, end_time,
+root_cause, evidence, ai_analysis
+
+## Contoh data (1 incident, ai_analysis dipotong)
+{
+  "incident_id": "INC-00001",
+  "device_id": "R-004",
+  "severity": "HIGH",
+  "anomaly_type": "traffic_spike",
+  "start_time": "2026-09-06T14:00:00.000",
+  "end_time": "2026-09-06T14:30:00.000",
+  "root_cause": "Traffic Spike",
+  "evidence": "Bandwidth averaged 96.02 over 7 telemetry events, while CPU usage averaged 34.83%.",
+  "ai_analysis": "### 1. Summary\nBetween ... (dipotong, lihat catatan format di bawah)"
+}
+
+## Catatan format data (penting buat frontend)
+- ai_analysis adalah teks MARKDOWN (heading ###, bullet, bold, garis ---) dengan 6 bagian:
+  Summary, Evidence, Likely Cause, Potential Impact, Diagnostic Recommendations, Evidence Limitation.
+  Render pakai react-markdown, jangan tampilkan sebagai teks mentah.
+- start_time/end_time: string ISO tanpa timezone. Tampilkan apa adanya (format saja),
+  jangan konversi timezone.
+- severity yang sudah terlihat: HIGH, CRITICAL. Kemungkinan ada MEDIUM/LOW. Badge harus punya warna default.
+- Data di JSON tidak terurut waktu. Sort di frontend.
+- Bandwidth tidak punya satuan. Jangan tulis Mbps/Gbps di UI.
+- evidence itu satu kalimat pendek, cocok buat kolom ringkasan di tabel.
+
+## Status
+- CORS belum dikonfigurasi (perlu ditambah untuk http://localhost:5173)
+
+## Aturan
+- Jangan ubah folder backend kecuali diminta
+- Jangan install library baru tanpa nanya. Pengecualian yang sudah diizinkan: react-markdown
+- Jelasin perubahan sebelum edit banyak file
+- Jangan pernah baca atau tulis file .env
+- Kalau tidak yakin nama field atau file, tanya, jangan nebak
