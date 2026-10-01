@@ -11,8 +11,8 @@ alwaysApply: true
 - Frontend: React + Vite + TypeScript + Tailwind (folder /frontend, baru dibuat)
 
 ## Cara run backend
-- Dari root, venv aktif: uvicorn backend.main:app --reload
-- Docs: http://localhost:8000/docs
+- Backend (dari folder backend, venv aktif): python -m uvicorn main:app --reload --host 127.0.0.1 --port 8000
+- Frontend (dari folder frontend): npm run dev
 
 ## Endpoint (semua GET)
 - / -> {"message": "..."}
@@ -48,7 +48,8 @@ root_cause, evidence, ai_analysis
 - evidence itu satu kalimat pendek, cocok buat kolom ringkasan di tabel.
 
 ## Status
-- CORS belum dikonfigurasi (perlu ditambah untuk http://localhost:5173)
+- CORS sudah dikonfigurasi untuk localhost:5173 dan 127.0.0.1:5173
+- Frontend Vite + React + TS + Tailwind v4 sudah di-setup (App.tsx masih kosong)
 
 ## Aturan
 - Jangan ubah folder backend kecuali diminta
