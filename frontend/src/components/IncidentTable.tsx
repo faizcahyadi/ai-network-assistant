@@ -1,5 +1,6 @@
 import type { Incident } from "../types";
 import { formatTime } from "../utils";
+import { Link } from "react-router-dom";
 import SeverityBadge from "./SeverityBadge";
 
 export default function IncidentTable({ incidents }: { incidents: Incident[] }) {
@@ -27,8 +28,12 @@ export default function IncidentTable({ incidents }: { incidents: Incident[] }) 
         </thead>
         <tbody className="divide-y divide-gray-200">
           {sorted.map((incident) => (
-            <tr key={incident.incident_id}>
-              <td className="px-4 py-3 font-medium">{incident.incident_id}</td>
+            <tr className="transition-colors hover:bg-gray-50" key={incident.incident_id}>
+              <td className="px-4 py-3 font-medium">
+                <Link className="text-blue-700 hover:underline" to={`/incidents/${incident.incident_id}`}>
+                  {incident.incident_id}
+                </Link>
+              </td>
               <td className="px-4 py-3">{incident.device_id}</td>
               <td className="px-4 py-3">
                 <SeverityBadge severity={incident.severity} />

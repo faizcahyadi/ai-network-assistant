@@ -1,26 +1,26 @@
-import { useEffect, useState } from "react";
-import { getIncidents } from "./api";
-import type { Incident } from "./types";
-import IncidentTable from "./components/IncidentTable";
+import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
+import IncidentDetailPage from "./pages/IncidentDetailPage";
+import IncidentListPage from "./pages/IncidentListPage";
 
-export default function App() {
-  const [incidents, setIncidents] = useState<Incident[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    getIncidents()
-      .then(setIncidents)
-      .catch((err: Error) => setError(err.message))
-      .finally(() => setLoading(false));
-  }, []);
-
+function NotFoundPage() {
   return (
     <main className="mx-auto max-w-6xl p-6">
-      <h1 className="mb-6 text-2xl font-bold">AI Network Assistant</h1>
-      {loading && <p className="text-gray-500">Loading incidents...</p>}
-      {error && <p className="text-red-600">Gagal memuat data: {error}</p>}
-      {!loading && !error && <IncidentTable incidents={incidents} />}
+      <h1 className="mb-4 text-2xl font-bold">Halaman tidak ditemukan</h1>
+      <Link className="text-blue-600 underline" to="/">
+        Kembali ke daftar incident
+      </Link>
     </main>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<IncidentListPage />} />
+        <Route path="/incidents/:id" element={<IncidentDetailPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
